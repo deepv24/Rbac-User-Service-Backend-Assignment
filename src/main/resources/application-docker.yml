@@ -3,6 +3,8 @@ server:
 
 spring:
   datasource:
+    hikari:
+      connection-timeout: 2000
     url: jdbc:mysql://mysql:3306/rbac_db?useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
     username: rbac
     password: rbacpass

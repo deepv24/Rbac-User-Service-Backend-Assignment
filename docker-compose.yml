@@ -3,7 +3,7 @@ version: '3.8'
 services:
 
   mysql:
-    image: mysql:8.0-debian
+    image: mysql:8.0
     container_name: mysql
     restart: always
     environment:
@@ -16,7 +16,7 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "127.0.0.1"]
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       interval: 5s
       timeout: 3s
       retries: 10
@@ -39,27 +39,34 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+
+      ### MOST IMPORTANT ##
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--bootstrap-server=kafka:9092", "--list"]
+      interval: 10s
+      timeout: 5s
+      retries: 8
 
   app:
     build: .
     container_name: rbac-app
     ports:
       - "8080:8080"
+
     depends_on:
       mysql:
         condition: service_healthy
       kafka:
-        condition: service_started
+        condition: service_healthy   # IMPORTANT
+
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/rbac_db?useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
-      SPRING_DATASOURCE_USERNAME: rbac
-      SPRING_DATASOURCE_PASSWORD: rbacpass
-      APP_JWT_SECRET: THIS_IS_MY_SECRET_KEY_CHANGE_IT_1234567890
-      APP_JWT_EXPIRATION_MS: 86400000
+      SPRING_PROFILES_ACTIVE: docker
 
 volumes:
   mysql_data:
+
