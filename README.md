@@ -16,15 +16,23 @@ This is a backend service for managing users with Role-Based Access Control (RBA
    git clone https://github.com/deepv24/Rbac-User-Service-Backend-Assignment.git
    cd Rbac-User-Service-Backend-Assignment
 
-2. Install dependencies and run the application:
+2. Change the property in application.properties 
+    for local: spring.profiles.active- local
+    for docker: spring.profiles.active - docker
 
-Using Maven:
+3. Please insure before running the application
+      Zookeper and Kafka Should be running 
+      Docker desktop should be running in your env
 
-./mvnw spring-boot:run
+4. Install dependencies and run the application:
 
-Using Docker Compose:
-
-docker-compose up --build
+   Using Maven:
+   
+   ./mvnw spring-boot:run
+   
+   Using Docker Compose:
+   
+   docker-compose up --build
 
 
 
