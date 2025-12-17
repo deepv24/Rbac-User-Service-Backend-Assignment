@@ -16,15 +16,33 @@ This is a backend service for managing users with Role-Based Access Control (RBA
    git clone https://github.com/deepv24/Rbac-User-Service-Backend-Assignment.git
    cd Rbac-User-Service-Backend-Assignment
 
-2. Change the property in application.properties 
-    for local: spring.profiles.active- local
-    for docker: spring.profiles.active - docker
+2.  Update application-local.yml
+
+Alternatively, update the following fields in application-local.yml:
+
+yaml
+spring:
+  datasource:
+    username: your_mysql_username
+    password: your_mysql_password
+
+
+---
+
+### Docker Users (No Changes Needed)
+
+For Docker-based setup, credentials are automatically configured via docker-compose.yml:
+
+bash
+docker-compose up --build
+
 
 3. Please insure before running the application
       Zookeper and Kafka Should be running 
       Docker desktop should be running in your env
+      MYSQL is running in your enviournment
 
-4. Install dependencies and run the application:
+5. Install dependencies and run the application:
 
    Using Maven:
    
